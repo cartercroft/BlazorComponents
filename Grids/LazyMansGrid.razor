@@ -1,0 +1,21 @@
+﻿@typeparam TItem
+@namespace CroftBlazorComponents.Grids
+
+<Grid Items=Items>
+    <Columns>
+        @foreach(var prop in typeof(TItem).GetProperties())
+        {
+            string name = prop.Name;
+            <GridColumn Field="@name" HeaderText="@name" TItem=TItem/>       
+        }
+    </Columns>
+</Grid>
+
+@code {
+    [Parameter]
+    public List<TItem> Items { get; set; }
+    protected override Task OnInitializedAsync()
+    {
+        return base.OnInitializedAsync();
+    }
+}

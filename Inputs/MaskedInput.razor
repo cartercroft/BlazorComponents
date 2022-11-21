@@ -1,0 +1,12 @@
+﻿@namespace CroftBlazorComponents.Inputs
+@code {
+    private string _displayValue = "";
+    private string _prevValue = "";
+    [Parameter]
+    public string Value { get; set; }
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+    [Parameter]
+    public string Mask { get; set; }
+
+}

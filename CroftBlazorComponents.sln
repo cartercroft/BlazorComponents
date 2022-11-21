@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorComponents", "BlazorComponents.csproj", "{83E3A029-E9A9-4C4D-80FF-E0A29179E989}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CroftBlazorComponents", "CroftBlazorComponents.csproj", "{83E3A029-E9A9-4C4D-80FF-E0A29179E989}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

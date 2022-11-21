@@ -1,0 +1,65 @@
+﻿@namespace CroftBlazorComponents.ModalComponents
+@if(IsOpen)
+{
+    <div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);" aria-modal="true" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    @if(ModalHeader != null)
+                    {
+                        @ModalHeader
+                    }
+                    else
+                    {
+                        <h4 class="modal-title">This is the title</h4>
+                    }
+                    <button type="button" class="close" @onclick=@(Close) @onclick:preventDefault="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    @if(ModalBody != null)
+                    {
+                        @ModalBody
+                    }
+                    else
+                    {
+                        <div>Sample Text.</div>
+                    }
+                    <p>This is the message text.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @if(ModalFooter != null)
+                {
+                    @ModalFooter
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code{
+    [Parameter]
+    public RenderFragment? ModalContent { get; set; }
+    [Parameter]
+    public RenderFragment? ModalFooter { get; set; }
+    [Parameter]
+    public RenderFragment? ModalHeader { get; set; }
+    [Parameter]
+    public RenderFragment? ModalBody { get; set; }
+    public bool IsOpen { get; set; }
+    public async void Toggle()
+    {
+        IsOpen &= !IsOpen;
+        await InvokeAsync(StateHasChanged);
+    }
+    public async void Open()
+    {
+        IsOpen = true;
+        await InvokeAsync(StateHasChanged);
+    }
+    public async void Close()
+    {
+        IsOpen = false;
+        await InvokeAsync(StateHasChanged);
+    }
+}

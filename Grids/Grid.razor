@@ -1,0 +1,112 @@
+﻿@typeparam TItem
+@namespace CroftBlazorComponents.Grids
+@attribute [CascadingTypeParameter(nameof(TItem))]
+@if(Items == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="grid">
+        <div class="filterContainer">
+
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    @Columns(default(TItem))
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in DisplayList)
+                {
+                    <CascadingValue Value="item">
+                        <tr>
+                            @Columns(item)
+                        </tr>
+                    </CascadingValue>
+                }
+            </tbody>
+        </table>
+        <div class="pageButtonsContainer">
+            <div class="pageButtons">
+                @if (CurrentPage == 1)
+                    {
+                        <button disabled>&laquo;</button>
+                        <button disabled>&lsaquo;</button>
+                    }
+                    else
+                    {
+                        <button @onclick="@MoveToFirstPage" title="Move First">&laquo;</button>
+                        <button @onclick="@MoveBack" title="Move Back">&lsaquo;</button>
+                    }
+                    <span class="m-auto text-center px-2">Page <CroftBlazorComponents.NumberInput Max="_totalPages" Min="1" Value=@(CurrentPage) /> of @_totalPages </span>
+                    @if (CurrentPage < _totalPages)
+                    {
+                        <button @onclick="@MoveNext" title="Move Next">&rsaquo;</button>
+                        <button @onclick="@MoveToLastPage" title="Move Last">&raquo;</button>
+                    }
+                    else
+                    {
+                        <button disabled>&rsaquo;</button>
+                        <button disabled>&raquo;</button>
+                    }
+            </div>
+        </div>
+    </div>
+}
+@code{
+    private int _totalPages => Convert.ToInt32(Math.Ceiling(Items.Count / (decimal)PageSize));
+    [Parameter]
+    public RenderFragment<TItem>? Columns { get; set; }
+    [Parameter]
+    public List<TItem> Items { get; set; }
+    [Parameter]
+    public int PageSize { get; set; } = 10;
+    private List<TItem> DisplayList;
+    private int _currentPage = 1;
+    private int CurrentPage
+    {
+        get => _currentPage;
+        set
+        {
+            if (value <= _totalPages)
+            {
+                _currentPage = value;
+            }
+        }
+    }
+    protected override async Task OnParametersSetAsync()
+    {
+        UpdateDisplay();
+        await base.OnParametersSetAsync();
+    }
+    protected async void UpdateDisplay()
+    {
+        DisplayList = Items.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+        await InvokeAsync(StateHasChanged);
+    }
+    protected void MoveToFirstPage()
+    {
+        CurrentPage = 1;
+    }
+    protected void MoveToLastPage()
+    {
+        CurrentPage = _totalPages;
+    }
+    protected void MoveBack()
+    {
+        CurrentPage--;
+        UpdateDisplay();
+    }
+    protected void MoveNext()
+    {
+        CurrentPage++;
+        UpdateDisplay();
+    }
+    protected void HandlePageInputChange(ChangeEventArgs args)
+    {
+        CurrentPage = int.Parse(args.Value.ToString());
+        UpdateDisplay();
+    }
+}
