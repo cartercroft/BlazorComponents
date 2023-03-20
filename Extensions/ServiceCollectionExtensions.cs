@@ -12,7 +12,7 @@ namespace CroftBlazorComponents.Extensions
     {
         public static void AddComponentServices(this IServiceCollection services)
         {
-            services.AddTransient<ToastService>();
+            services.AddSingleton<ToastService>();
         }
     }
 }

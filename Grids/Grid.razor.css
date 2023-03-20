@@ -7,18 +7,37 @@
 .jsgrid-row-item:hover {
     background: #9fcdf4;
 }
-
-th, td {
+.grid{
+    background-color: #DDD;
+    padding: 0.5em;
+    border-radius: 0.33em;
+    display: inline-block;
+    min-width: 300px;
+}
+.grid table {
+    width: 100%;
+    margin-bottom: .75em;
+}
+.grid table tbody td{
+    padding: 0.33em;
+    border: 1px solid rgba(150, 150, 150, .2); 
+}
+.grid table thead tr th, .grid table tbody tr td {
     padding: 15px;
     border: 1px solid #d1d1d1;
     text-align: center;
 }
 
-.pagebutton {
-    margin-right: 5px;
-    margin-top: 5px;
+.pageButtons {
+    display: flex;
 }
-
+    .pageButtons button {
+        font-size: 1.55em;
+        margin-right: 5px;
+        margin-top: 5px;
+        min-height: 25px;
+        min-width: 25px;
+    }
 .currentpage {
     background-color: dodgerblue;
     color: white;

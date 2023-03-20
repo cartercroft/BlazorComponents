@@ -14,9 +14,9 @@ namespace CroftBlazorComponents.Services
         {
             Interval = __DEFAULTINTERVAL__;
         }
-        public ToastService(IOptions<ToastServiceOptions> options)
+        public ToastService(int interval)
         {
-            Interval = options.Value.Interval ?? __DEFAULTINTERVAL__;
+            Interval = interval;
         }
 
         public void ShowToast(string message, ToastLevel level)
@@ -87,10 +87,5 @@ namespace CroftBlazorComponents.Services
         Warning,
         Success,
         Error
-    }
-
-    public class ToastServiceOptions 
-    {
-        public int? Interval { get; set; }
     }
 }

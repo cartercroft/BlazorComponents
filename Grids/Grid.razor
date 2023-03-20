@@ -1,5 +1,6 @@
 ﻿@typeparam TItem
 @namespace CroftBlazorComponents.Grids
+@using CroftBlazorComponents.Inputs
 @attribute [CascadingTypeParameter(nameof(TItem))]
 @if(Items == null)
 {
@@ -28,30 +29,28 @@ else
                 }
             </tbody>
         </table>
-        <div class="pageButtonsContainer">
-            <div class="pageButtons">
-                @if (CurrentPage == 1)
-                    {
-                        <button disabled>&laquo;</button>
-                        <button disabled>&lsaquo;</button>
-                    }
-                    else
-                    {
-                        <button @onclick="@MoveToFirstPage" title="Move First">&laquo;</button>
-                        <button @onclick="@MoveBack" title="Move Back">&lsaquo;</button>
-                    }
-                    <span class="m-auto text-center px-2">Page <CroftBlazorComponents.NumberInput Max="_totalPages" Min="1" Value=@(CurrentPage) /> of @_totalPages </span>
-                    @if (CurrentPage < _totalPages)
-                    {
-                        <button @onclick="@MoveNext" title="Move Next">&rsaquo;</button>
-                        <button @onclick="@MoveToLastPage" title="Move Last">&raquo;</button>
-                    }
-                    else
-                    {
-                        <button disabled>&rsaquo;</button>
-                        <button disabled>&raquo;</button>
-                    }
-            </div>
+        <div class="pageButtons">
+            @if (CurrentPage == 1)
+                {
+                    <button disabled>&laquo;</button>
+                    <button disabled>&lsaquo;</button>
+                }
+                else
+                {
+                    <button @onclick="@MoveToFirstPage" title="Move First">&laquo;</button>
+                    <button @onclick="@MoveBack" title="Move Back">&lsaquo;</button>
+                }
+                <span class="m-auto text-center px-2">Page <NumberInput Max="_totalPages" Min="1" Value=@(CurrentPage) class="w-25" /> of @_totalPages </span>
+                @if (CurrentPage < _totalPages)
+                {
+                    <button @onclick="@MoveNext" title="Move Next">&rsaquo;</button>
+                    <button @onclick="@MoveToLastPage" title="Move Last">&raquo;</button>
+                }
+                else
+                {
+                    <button disabled>&rsaquo;</button>
+                    <button disabled>&raquo;</button>
+                }
         </div>
     </div>
 }
