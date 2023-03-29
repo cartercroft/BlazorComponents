@@ -9,7 +9,6 @@ else if (ChildContent == null)
 {
     var property = typeof(TItem).GetProperty(Field);
     var value = property.GetValue(Item);
-    Type propertyType = property.PropertyType;
     if(string.IsNullOrEmpty(Format))
     {
         <td>@(value)</td>

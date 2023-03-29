@@ -1,58 +1,37 @@
 ﻿@namespace CroftBlazorComponents.ModalComponents
-@if(IsOpen)
+@if (IsOpen)
 {
-    <div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);" aria-modal="true" role="dialog">
-        <div class="modal-dialog">
+    <div class="modal fade show d-block" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    @if(ModalHeader != null)
-                    {
-                        @ModalHeader
-                    }
-                    else
-                    {
-                        <h4 class="modal-title">This is the title</h4>
-                    }
-                    <button type="button" class="close" @onclick=@(Close) @onclick:preventDefault="true">&times;</button>
+                    <h5 class="modal-title">@ModalTitle</h5>
+                    <button type="button" class="close" @onclick="@Close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
                 </div>
                 <div class="modal-body">
-                    @if(ModalBody != null)
-                    {
-                        @ModalBody
-                    }
-                    else
-                    {
-                        <div>Sample Text.</div>
-                    }
-                    <p>This is the message text.</p>
+                    @ModalBody
                 </div>
             </div>
             <div class="modal-footer">
-                @if(ModalFooter != null)
-                {
-                    @ModalFooter
-                }
+                @ModalFooter
             </div>
         </div>
     </div>
 }
 
-@code{
-    [Parameter]
-    public RenderFragment? ModalContent { get; set; }
+@code {
     [Parameter]
     public RenderFragment? ModalFooter { get; set; }
     [Parameter]
-    public RenderFragment? ModalHeader { get; set; }
-    [Parameter]
     public RenderFragment? ModalBody { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+    [Parameter]
+    public string ModalTitle { get; set; } = "";
     public bool IsOpen { get; set; }
-    public async void Toggle()
-    {
-        IsOpen &= !IsOpen;
-        await InvokeAsync(StateHasChanged);
-    }
-    public async void Open()
+    public async void Show()
     {
         IsOpen = true;
         await InvokeAsync(StateHasChanged);

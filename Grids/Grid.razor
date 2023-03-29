@@ -8,7 +8,7 @@
 }
 else
 {
-    <div class="grid">
+    <div @attributes="GridAttributes">
         <div class="filterContainer">
 
         </div>
@@ -19,13 +19,22 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach(var item in DisplayList)
+                @if (!DisplayList.Any())
                 {
-                    <CascadingValue Value="item">
-                        <tr>
-                            @Columns(item)
-                        </tr>
-                    </CascadingValue>
+                    <tr>
+                        No items found.
+                    </tr>   
+                }
+                else
+                {
+                    foreach(var item in DisplayList)
+                    {
+                        <CascadingValue Value="item">
+                            <tr>
+                                @Columns(item)
+                            </tr>
+                        </CascadingValue>
+                    }
                 }
             </tbody>
         </table>
@@ -55,6 +64,9 @@ else
     </div>
 }
 @code{
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> GridAttributes { get; set; } = new();
+
     private int _totalPages => Convert.ToInt32(Math.Ceiling(Items.Count / (decimal)PageSize));
     [Parameter]
     public RenderFragment<TItem>? Columns { get; set; }
@@ -78,6 +90,11 @@ else
     protected override async Task OnParametersSetAsync()
     {
         UpdateDisplay();
+        //default class to .grid, otherwise append .grid class to passed in class attribute.
+        if(!GridAttributes.TryAdd("class", "grid"))
+        {
+            GridAttributes["class"] = $"{GridAttributes["class"]} grid";
+        }
         await base.OnParametersSetAsync();
     }
     protected async void UpdateDisplay()
