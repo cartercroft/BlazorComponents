@@ -8,10 +8,11 @@
     background: #9fcdf4;
 }
 .grid{
+    display: flex;
+    flex-wrap: wrap;
     background-color: #DDD;
     padding: 0.5em;
     border-radius: 0.33em;
-    display: inline-block;
     min-width: 300px;
 }
 .grid table {
@@ -20,7 +21,8 @@
 }
 
 .pageButtons {
-    display: flex;
+    flex-grow: 7;
+    text-align: center;
 }
     .pageButtons button {
         font-size: 1.55em;
@@ -28,6 +30,18 @@
         margin-top: 5px;
         min-height: 25px;
         min-width: 25px;
+    }
+    ::deep .page-input{
+        max-width: 40px;
+    }
+.page-sizes{
+    align-self: flex-end;
+    justify-self: flex-end;
+    display: block;
+}
+    .page-sizes select
+    {
+        height: 25px;
     }
 .currentpage {
     background-color: dodgerblue;

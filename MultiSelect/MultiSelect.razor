@@ -16,7 +16,7 @@
                         <span>
                             @(GetDisplayText(selectedOption))
                         </span>
-                        <button class="btn btn-close" type="button" @onclick="() => HandleRemove(selectedOption)"></button>
+                        <button class="btn btn-close" type="button" @onclick="() => HandleRemove(selectedOption)" @onclick:stopPropagation="true"></button>
                     </div>
                 }
             }
@@ -39,7 +39,7 @@
         }
         <button class="btn btn-close close-button" @onclick="ClearSelected">
         </button>
-        <button class="oi oi-chevron-bottom dropdown-button">
+        <button class=@($"oi {(_isDropdownOpen ? "oi-chevron-top" : "oi-chevron-bottom")} dropdown-button")>
         </button>
     </div>
 </div>
@@ -54,11 +54,11 @@
     [Parameter]
     public string? DisplayField { get; set; }
     [Parameter]
-    public EventCallback<List<TOption>> SelectedChanged { get; set; }
+    public EventCallback<ICollection<TOption>> SelectedChanged { get; set; }
     [Parameter]
-    public List<TOption> Selected { get; set; } = new();
+    public ICollection<TOption> Selected { get; set; } = new List<TOption>();
 
-    private List<TOption> DisplayOptions { get; set; } = new();
+    private ICollection<TOption> DisplayOptions { get; set; } = new List<TOption>();
 
     protected override async Task OnParametersSetAsync()
     {
@@ -78,22 +78,25 @@
             Selected.Add(changedOption);
             DisplayOptions.Remove(changedOption);
         }
-        await SelectedChanged.InvokeAsync(Selected);
-        await InvokeAsync(StateHasChanged);
+        await RefreshComponent();
     }
 
     protected async void HandleRemove(TOption option)
     {
         Selected.Remove(option);
         DisplayOptions.Add(option);
-        await SelectedChanged.InvokeAsync(Selected);
-        await InvokeAsync(StateHasChanged);
+        await RefreshComponent();
     }
 
     protected async void ClearSelected()
     {
         Selected.Clear();
         DisplayOptions = Options.Except(Selected).ToList();
+        await RefreshComponent();
+    }
+
+    private async Task RefreshComponent()
+    {
         await SelectedChanged.InvokeAsync(Selected);
         await InvokeAsync(StateHasChanged);
     }

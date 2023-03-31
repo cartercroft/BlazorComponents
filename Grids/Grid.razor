@@ -8,7 +8,13 @@
 }
 else
 {
-    <div @attributes="GridAttributes">
+    object passedInClass = new object();
+    if(GridAttributes != null)
+    {
+        GridAttributes.TryGetValue("class", out passedInClass);
+    }
+        
+    <div @attributes="GridAttributes" class=@($"{passedInClass?.ToString()} grid")>
         <div class="filterContainer">
 
         </div>
@@ -49,7 +55,7 @@ else
                     <button @onclick="@MoveToFirstPage" title="Move First">&laquo;</button>
                     <button @onclick="@MoveBack" title="Move Back">&lsaquo;</button>
                 }
-                <span class="m-auto text-center px-2">Page <NumberInput Max="_totalPages" Min="1" Value=@(CurrentPage) class="w-25" /> of @_totalPages </span>
+                <span class="m-auto text-center px-2">Page <NumberInput Max="_totalPages" Min="1" Value=@(CurrentPage) class="page-input" /> of @_totalPages </span>
                 @if (CurrentPage < _totalPages)
                 {
                     <button @onclick="@MoveNext" title="Move Next">&rsaquo;</button>
@@ -60,6 +66,15 @@ else
                     <button disabled>&rsaquo;</button>
                     <button disabled>&raquo;</button>
                 }
+        </div>
+        <div class="page-sizes">
+            Items Per Page:
+            <select @onchange="HandlePageSizeChange" value="@PageSize">
+                @foreach(int size in PageSizes)
+                {
+                    <option value="@size">@size</option>
+                }
+            </select>
         </div>
     </div>
 }
@@ -73,7 +88,9 @@ else
     [Parameter]
     public List<TItem> Items { get; set; }
     [Parameter]
-    public int PageSize { get; set; } = 10;
+    public int PageSize { get; set; } = 5 ;
+    [Parameter]
+    public int[] PageSizes { get; set; } = new int[] { 5, 10, 25, 50 };
     private List<TItem> DisplayList;
     private int _currentPage = 1;
     private int CurrentPage
@@ -91,10 +108,7 @@ else
     {
         UpdateDisplay();
         //default class to .grid, otherwise append .grid class to passed in class attribute.
-        if(!GridAttributes.TryAdd("class", "grid"))
-        {
-            GridAttributes["class"] = $"{GridAttributes["class"]} grid";
-        }
+
         await base.OnParametersSetAsync();
     }
     protected async void UpdateDisplay()
@@ -123,6 +137,11 @@ else
     protected void HandlePageInputChange(ChangeEventArgs args)
     {
         CurrentPage = int.Parse(args.Value.ToString());
+        UpdateDisplay();
+    }
+    protected void HandlePageSizeChange(ChangeEventArgs args)
+    {
+        PageSize = int.Parse(args.Value.ToString());
         UpdateDisplay();
     }
 }
